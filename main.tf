@@ -24,5 +24,8 @@ provider "random" {
 }
 
 locals {
-  prefix = "bara-"
+  naming_prefix = "bara"
+  common_tags = {
+    owner = "bara"
+  }
 }
