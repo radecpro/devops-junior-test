@@ -2,6 +2,7 @@ resource "google_compute_instance" "admin_vm" {
   name         = "${local.naming_prefix}-admin-vm"
   zone         = var.gcp_zone
   machine_type = "e2-micro"
+  labels       = local.common_tags
 
   boot_disk {
     initialize_params {
