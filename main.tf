@@ -7,6 +7,10 @@ terraform {
       source = "hashicorp/random"
     }
   }
+  backend "gcs" {
+    bucket = "bara-tfstate"
+    prefix = "terraform/state"
+  }
 }
 
 provider "google" {
@@ -17,4 +21,8 @@ provider "google" {
 
 provider "random" {
   # Configuration options
+}
+
+locals {
+  prefix = "bara-"
 }
