@@ -18,3 +18,10 @@ resource "google_storage_bucket_iam_member" "public_bucket_access" {
   role   = "roles/storage.objectViewer"
   member = "allUsers"
 }
+
+# Admin VM access to bucket
+resource "google_storage_bucket_iam_member" "website_admin_access" {
+  bucket = google_storage_bucket.website_content.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.website_admin.email}"
+}
