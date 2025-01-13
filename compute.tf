@@ -1,8 +1,8 @@
 resource "google_compute_instance" "admin_vm" {
-  name         = "${local.naming_prefix}-admin-vm"
-  zone         = var.gcp_zone
-  machine_type = "e2-micro"
-  labels       = local.common_tags
+  name                      = "${local.naming_prefix}-admin-vm"
+  zone                      = var.gcp_zone
+  machine_type              = "e2-micro"
+  labels                    = local.common_tags
   allow_stopping_for_update = true
 
   boot_disk {
@@ -14,12 +14,12 @@ resource "google_compute_instance" "admin_vm" {
   network_interface {
     network    = google_compute_network.custom-vpc.id
     subnetwork = google_compute_subnetwork.vpc-subnet.id
-    access_config { }
+    access_config {}
   }
 
   service_account {
     email  = google_service_account.website_admin.email
-    scopes = [ "https://www.googleapis.com/auth/cloud-platform" ]
+    scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 
   metadata_startup_script = <<EOF

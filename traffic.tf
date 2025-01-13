@@ -22,10 +22,10 @@ resource "google_compute_global_address" "cdn_public_address" {
 }
 
 resource "google_compute_global_forwarding_rule" "cdn_global_forwarding_rule" {
-  name       = "${local.naming_prefix}-cdn-global-forwarding-https-rule"
-  target     = google_compute_target_http_proxy.cdn_http_proxy.self_link
-  ip_address = google_compute_global_address.cdn_public_address.address
-  port_range = "80"
+  name                  = "${local.naming_prefix}-cdn-global-forwarding-https-rule"
+  target                = google_compute_target_http_proxy.cdn_http_proxy.self_link
+  ip_address            = google_compute_global_address.cdn_public_address.address
+  port_range            = "80"
   load_balancing_scheme = "EXTERNAL"
-  ip_protocol = "TCP"
+  ip_protocol           = "TCP"
 }
