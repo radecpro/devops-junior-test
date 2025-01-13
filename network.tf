@@ -24,3 +24,15 @@ resource "google_compute_firewall" "allow-ssh" {
   // Connection via IAP for VMs without external IP
   source_ranges = ["35.235.240.0/20"]
 }
+
+resource "google_compute_firewall" "allow-http" {
+  name    = "${local.naming_prefix}-fw-allow-http"
+  network = google_compute_network.custom-vpc.id
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
+  }
+
+  source_ranges = ["0.0.0.0/0"] # Or a more restrictive range
+}
