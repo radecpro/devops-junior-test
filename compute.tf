@@ -20,6 +20,26 @@ resource "google_compute_instance" "admin_vm" {
     email  = google_service_account.website_admin.email
     scopes = [ "https://www.googleapis.com/auth/cloud-platform" ]
   }
+
+  metadata_startup_script = <<EOF
+#!/bin/bash
+
+# Install dependencies
+sudo apt-get update
+sudo apt-get install -y python3-pip
+pip3 install Flask google-cloud-storage
+
+# Copy the application code
+sudo mkdir /opt/my-app
+sudo gsutil cp gs://bara-website-content/application/app.py /opt/my-app/
+sudo gsutil cp -r gs://bara-website-content/application/templates /opt/my-app/
+
+# Install screen and run the application in a detached screen session
+sudo apt-get install -y screen
+screen -dmS my-app-screen bash -c 'cd /opt/my-app && python3 app.py'
+
+
+EOF
 }
 
 resource "google_service_account" "website_admin" {
