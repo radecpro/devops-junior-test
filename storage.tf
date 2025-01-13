@@ -3,6 +3,7 @@ resource "google_storage_bucket" "website_content" {
   location      = var.gcp_region
   labels        = local.common_tags
   storage_class = "STANDARD"
+  force_destroy = true
 
   uniform_bucket_level_access = true
 
