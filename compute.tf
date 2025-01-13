@@ -14,6 +14,7 @@ resource "google_compute_instance" "admin_vm" {
   network_interface {
     network    = google_compute_network.custom-vpc.id
     subnetwork = google_compute_subnetwork.vpc-subnet.id
+    access_config { }
   }
 
   service_account {
@@ -23,22 +24,27 @@ resource "google_compute_instance" "admin_vm" {
 
   metadata_startup_script = <<EOF
 #!/bin/bash
+sudo -E bash -c '
+  # Install dependencies
+  apt-get update
+  apt-get install -y python3-pip python3-venv google-cloud-sdk screen
 
-# Install dependencies
-sudo apt-get update
-sudo apt-get install -y python3-pip
-pip3 install Flask google-cloud-storage
+  # Create a virtual environment for Python
+  mkdir -p /opt/my-app
+  python3 -m venv /opt/my-app/venv
 
-# Copy the application code
-sudo mkdir /opt/my-app
-sudo gsutil cp gs://bara-website-content/application/app.py /opt/my-app/
-sudo gsutil cp -r gs://bara-website-content/application/templates /opt/my-app/
+  # Activate the virtual environment and install Python packages
+  source /opt/my-app/venv/bin/activate
+  pip install --upgrade pip
+  pip install Flask google-cloud-storage
 
-# Install screen and run the application in a detached screen session
-sudo apt-get install -y screen
-screen -dmS my-app-screen bash -c 'cd /opt/my-app && python3 app.py'
+  # Copy the application code
+  gcloud storage cp gs://bara-website-content/application/app.py /opt/my-app/
+  gcloud storage cp -r gs://bara-website-content/application/templates /opt/my-app/
 
-
+  # Run the application in a detached screen session
+  screen -dmS my-app-screen bash -c "cd /opt/my-app && source venv/bin/activate && python3 app.py"
+'
 EOF
 }
 
