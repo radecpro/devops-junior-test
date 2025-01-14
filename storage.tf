@@ -1,3 +1,4 @@
+# Storage bucket used to store website content
 resource "google_storage_bucket" "website_content" {
   name          = "${local.naming_prefix}-website-content"
   location      = var.gcp_region
@@ -20,7 +21,7 @@ resource "google_storage_bucket_iam_member" "public_bucket_access" {
   member = "allUsers"
 }
 
-# Admin VM access to bucket
+# Object admin permissions for service account used in Admin VM
 resource "google_storage_bucket_iam_member" "website_admin_access" {
   bucket = google_storage_bucket.website_content.name
   role   = "roles/storage.objectAdmin"

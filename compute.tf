@@ -1,3 +1,4 @@
+# Admin VM to manage website content
 resource "google_compute_instance" "admin_vm" {
   name                      = "${local.naming_prefix}-admin-vm"
   zone                      = var.gcp_zone
@@ -48,6 +49,7 @@ sudo -E bash -c '
 EOF
 }
 
+# Service account used in Admin VM with storage permissions
 resource "google_service_account" "website_admin" {
   account_id   = "${local.naming_prefix}-website-admin-sa"
   display_name = "Website Admin Service Account"
